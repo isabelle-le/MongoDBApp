@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="default">
+<head>
+    <title>Movies</title>
+    <link href="webjars/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<canvas id="myChart"></canvas>
+<h1>Movies</h1>
+<div class="table-responsive">
+    <table id="movies" class="table table-bordered table-hover">
+        <caption>List of movies</caption>
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Year</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="movie, iter : ${movies}">
+            <th th:text="${iter.count}" scope="row">Index ...</th>
+            <td th:text="${movie.title}">Title ...</td>
+            <td th:text="${movie.year}">Year ...</td>
+            <td th:text="${movie.getDuration().toHours() + ':' + (movie.getDuration().toMinutes() % 60)}">Duration ..
+                .</td>
+            <td>
+                <ul th:each="genre : ${movie.genres}">
+                    <li th:text="${genre}"></li>
+                </ul>
+            </td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.avg(movie.ratings.![rating]), 1, 1)}">
+            </td>
+            <td>
+                <button>
+                    <a th:href="@{/edit/{id}(id=${movie._id})}" style="text-decoration: none">Edit</a>
+                </button>
+            </td>
+            <td>
+                <button>
+                    <a th:href="@{/delete/{id}(id=${movie._id})}">Delete</a>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="9"><a href="/addMovie">Add a new movie</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script
+			  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+			  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var moviesTable = document.getElementById('movies');
+        var labels = [];
+        var ratings = [];
+        for (var i = 1; i < 10; i++) {
+            var cells = moviesTable.rows[i];
+            labels.push(cells.cells.item(1).innerText);
+            ratings.push(cells.cells.item(5).innerText);
+        }
+
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "My First dataset",
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: ratings
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+    }
+    )
+</script>
+</body>
+</html>

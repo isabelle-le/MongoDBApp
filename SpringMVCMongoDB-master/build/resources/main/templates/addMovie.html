@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="default">
+<head>
+    <title>Add Film</title>
+</head>
+<body>
+<div class="container">
+<h1>Add a New Film</h1>
+
+<a href="/MovieList">Return to Home Page</a>
+
+<form action="#" th:action="@{/addMovie}" th:object="${movie}" method="post" class="col-md-6">
+    <div class="form-group row">
+        <label for="title" class="col-md-2 col-form-label">Title:</label>
+        <div class="col-md-10">
+            <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="title" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="runtime" class="col-md-2 col-form-label">Duration:</label>
+        <div class="col-md-10">
+            <input class="form-control" type="text" th:field="*{runtime}" id="runtime" placeholder="duration" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="genres" class="col-md-2 col-form-label">Genre:</label>
+        <div class="col-md-10">
+            <input class="form-control" type="text" th:field="*{genres}" id="genres" placeholder="genre" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="ratings" class="col-md-2 col-form-label">Rating:</label>
+        <div class="col-md-10">
+            <input type="number" name="ratings" th:field="*{ratings}" id="ratings" placeholder="rating" class="form-control" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Film</button>
+</form>
+</div>
+</body>
+</html>
